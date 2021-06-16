@@ -1,6 +1,15 @@
 language: python
 sudo: false
 
+env:
+  global:
+  - USER="Paul-Henri-B"
+  - EMAIL="paulhenri.behague@gmail.com"
+  - REPO="demo_formation"
+  - FILES="results.json"
+  - GH_REPO="github.com/${USER}/${REPO}.git"
+  - secure: "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAtxPFsyzet3pwTfCEOr4x\n7H16vIS+RZg2J4r3ScUpnJ1Gj3gDlITySPBYQJWNKezPQSwJhRKqf7mQCOKN8Q37\nNjCd5wcGXPQpoUitx4QfuQGpWDJMAoquEBhMVkMhITtYH4LMtp+EH1r1EHNq6iCR\niNwBlKVB26jj2Z81IWVnrJRrcR1nyY3Et5Z9V677Esc0lzX1og85Sn5ntFAM4VO1\nq0G576CAVaMjEotMoxMmcR7bzwgWdJvJtrbp5qKBeohTnyAduv0wxuTwUKwRGrty\nWn+BRW6tg8MlN4o/MHAUAsAimtLFpZC/DjuZN2HsgnIOPo4YwvTPFLaXTkebMrI6\nVyF8AEt6bFexZyg4fffBtmTdl5ELsAcA2qIM20YpznAgp+SXUjhAwyN2FrbkxFBf\nki8jwJXI9Rqs35nKJ8Noc1qJ9IrPs9A6bXqWoBADNnid1dfqpxMgwbSiTOXAt1Ym\n/044nbhScf4DZoLmGMoVokWXQRUgqvIzIFT5FlcLk4ljf9mcLsp6xxJ1iXu7u2A+\nGNUVconjy0rkcstzPfupfl4zpK+CJQBwCdxjib3MTu/CeXPInk5QEJWgch9CGIcr\nA+gC2ryE/gJXb7ZFG5GD1lCtR7M+hc0t9lqws+U+Lj0AzUEvgJo61KM114tJoy3q\nUgcOyjXeWU8KLSXKtH8coG8CAwEAAQ=="
+
 before_install:
   - sudo apt-get install -y firefox
   - wget https://github.com/mozilla/geckodriver/releases/download/v0.29.1/geckodriver-v0.29.1-linux64.tar.gz
@@ -13,4 +22,16 @@ before_install:
   - gem install nokogiri -v 1.10.10
 
 script:
- - behave --format json -o results/results.json
+  - behave --format json -o results/results.json
+
+after_script :
+  - MESSAGE=$(git log --format=%B -n 1 $TRAVIS_COMMIT)
+  - git clone git://${GH_REPO}
+  - mv -f ${FILES} ${REPO}
+  - cd ${REPO}
+  - git remote
+  - git config user.email ${EMAIL}
+  - git config user.name ${USER}
+  - git add ${FILES}
+  - git commit -m ${MESSAGE}
+  - git push "https://${TRAVIS_SECURE_TOKEN_NAME}@${GH_REPO}" master > /dev/null 2>&1
