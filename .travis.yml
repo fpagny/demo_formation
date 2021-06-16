@@ -31,7 +31,7 @@ after_script :
   - cd ${REPO}
   - git remote
   - git config user.email ${EMAIL}
-  - git config user.name ${USER}
+  - git config user.name "Paul-Henri-B"
   - git add ${FILES}
   - git commit -m ${MESSAGE}
   - git push "https://${TRAVIS_SECURE_TOKEN_NAME}@${GH_REPO}" master > /dev/null 2>&1
