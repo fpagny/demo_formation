@@ -14,7 +14,5 @@ before_install:
 
 script:
   - behave --format json -o results/results.json
-
-after_script :
   - cd results
   - cat results.json
