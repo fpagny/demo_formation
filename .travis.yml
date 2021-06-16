@@ -1,0 +1,16 @@
+language: python
+sudo: false
+
+before_install:
+  - sudo apt-get install -y firefox
+  - wget https://github.com/mozilla/geckodriver/releases/download/v0.29.1/geckodriver-v0.29.1-linux64.tar.gz
+  - tar -xvzf geckodriver*
+  - chmod +x geckodriver
+  - sudo mv geckodriver "/usr/local/bin"
+  - pip install behave selenium
+  - rvm install 2.5
+  - rvm use 2.5
+  - gem install nokogiri -v 1.10.10
+
+script:
+ - behave --format json -o results/results.json
