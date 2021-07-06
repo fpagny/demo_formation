@@ -1,7 +1,7 @@
 def allocate_cost(budget,hospitalList):
 	return [budget/len(hospitalList) for i in hospitalList]
 
-#Main
+#Main loop
 if __name__ == '__main__':
 	hospitalList = {
 	"hospital1": 300,
